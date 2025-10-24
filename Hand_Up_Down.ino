@@ -294,7 +294,6 @@ void setup(void)
 {
 	pinMode(2,INPUT);
 	pinMode(6, OUTPUT);
-	Serial.begin(9600);
   	P.begin();
 	P.setFont(yes);
   	P.setCharSpacing(0);
@@ -327,12 +326,10 @@ void loop(void)
 			up();
 			isUp = true;
 			pressed = false;
-			Serial.println("Up!");
 		} else if (isUp && P.displayAnimate()) {
 			down();
 			isUp = false;
 			pressed = false;
-			Serial.println("Down!");
 		}
 	}
 } // 
