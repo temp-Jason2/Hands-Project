@@ -295,9 +295,9 @@ void setup(void)
 	pinMode(2,INPUT);
 	pinMode(6, OUTPUT);
 	Serial.begin(9600);
-  P.begin();
+  	P.begin();
 	P.setFont(yes);
-  P.setCharSpacing(0);
+  	P.setCharSpacing(0);
 }
 
 void up()
@@ -320,7 +320,7 @@ void loop(void)
 		digitalWrite(6, HIGH);
 	}
 
-  if (digitalRead(2) == HIGH || pressed){
+  	if (digitalRead(2) == HIGH || pressed){
 		pressed = true;
 		firstPress = false;
 		if (!isUp && P.displayAnimate()) {
