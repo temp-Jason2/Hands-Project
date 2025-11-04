@@ -27,6 +27,8 @@ MD_Parola P = MD_Parola(HARDWARE_TYPE, DATA_PIN, CLK_PIN, CS_PIN, MAX_DEVICES);
 bool isUp = false;
 bool firstPress = true;
 bool pressed = 0;
+bool press_delay = false;
+long offset = 0L;
  
 MD_MAX72XX::fontType_t yes[] PROGMEM = 
 {
@@ -294,9 +296,9 @@ void setup(void)
 {
 	pinMode(2,INPUT);
 	pinMode(6, OUTPUT);
-  	P.begin();
+  P.begin();
 	P.setFont(yes);
-  	P.setCharSpacing(0);
+  P.setCharSpacing(0);
 }
 
 void up()
@@ -313,23 +315,34 @@ void down()
 
 void loop(void)
 {
-	if (millis() % 2000 < 1750 || isUp || firstPress) {
-		digitalWrite(6, LOW);
-	} else if (!isUp) {
+	if (millis() - offset % 2000 < 250 && !isUp && !firstPress) {
 		digitalWrite(6, HIGH);
+	} else {
+		digitalWrite(6, LOW);
 	}
 
-  	if (digitalRead(2) == HIGH || pressed){
+  if (digitalRead(2) == HIGH || pressed){
+		if (press_delay) {
+			return;
+		}
 		pressed = true;
 		firstPress = false;
+		if (offset == 0) {
+			offset = millis();
+		}
 		if (!isUp && P.displayAnimate()) {
 			up();
+			press_delay = true;
 			isUp = true;
 			pressed = false;
 		} else if (isUp && P.displayAnimate()) {
 			down();
+			press_delay = true;
 			isUp = false;
 			pressed = false;
 		}
+	} else {
+		press_delay = false;
+		offset = 0;
 	}
 } // 
